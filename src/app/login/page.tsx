@@ -65,7 +65,7 @@ const LoginPage = () => {
         </Button>
       </CtForm>
       <div className="text-center mt-4 text-sm text-gray-700">
-        Don’t have an account?{" "}
+        Dont have an account?{" "}
         <Link href={"/register"} className="text-blue-600 underline">
           Join the Community
         </Link>
