@@ -116,7 +116,7 @@ console.log('userContext',user)
 
   useEffect(() => {
     handleUser();
-  }, []);
+  }, [isLoading]);
 
   return (
     <UserContext.Provider value={{ user, setUser, isLoading, setIsLoading }}>
@@ -124,7 +124,7 @@ console.log('userContext',user)
     </UserContext.Provider>
   );
 };
-
+ 
 export const useUser = () => {
   const context = useContext(UserContext);
 
