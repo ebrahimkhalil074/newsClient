@@ -24,8 +24,9 @@ export const useUserLogin = () => {
   return useMutation<any, Error, FieldValues>({
     mutationKey: ["USERLOGIN"],
     mutationFn: async (userData) => await userLogin(userData),
-    onSuccess: () => {
-      toast.success("user login successful");
+    onSuccess(data) {
+      console.log(data)
+      toast.success(data.message)
     },
     onError: (error) => {
       toast.error(error.message);

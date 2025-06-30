@@ -4,14 +4,16 @@ import Banner from "../components/home/Banner";
 import LatestNews from "../components/home/LatestNews";
 import LatestVideo from "../components/home/LatestVideo";
 import Marque from "../components/home/Marque";
+import { LatestNewsSkeleton } from "../components/Skeleton/LatestNewsSkeleton";
+import { LatestVideoSkeleton } from "../components/Skeleton/LatestVideoSkeleton";
 import { useGetAllNews } from "../hooks/news.hook";
 import { useGetAllVideos } from "../hooks/video.hook";
 
 export default function Home() {
-   const {data:newsData,isError,isLoading:newsloding} =useGetAllNews();
+   const {data:newsData,isError,isLoading:newsLoading} =useGetAllNews();
    console.log(newsData)
-   const {data:videoData,isError:videoError,isLoading:videoLoding} =useGetAllVideos();
-   if (newsloding || videoLoding) {
+   const {data:videoData,isError:videoError,isLoading:videoLoading} =useGetAllVideos();
+   if (newsLoading || videoLoading) {
     return <h1 className="h-screen">loding...</h1>
    }
   const news = newsData?.data 
@@ -24,9 +26,18 @@ export default function Home() {
      
 <Banner />
 <Marque title="সর্বশেষ সংবাদ " data={news}/>
-<LatestNews data={news} />
-<LatestVideo title="সর্বশেষ ভিডিও " items={video} />
-       
+
+{newsLoading ? (
+  <LatestNewsSkeleton />
+) : (
+  <LatestNews data={news} />
+)}
+
+{videoLoading ? (
+  <LatestVideoSkeleton />
+) : (
+  <LatestVideo title="সর্বশেষ ভিডিও" items={video} />
+)}
     </section>
   );
 }
