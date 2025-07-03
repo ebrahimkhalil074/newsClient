@@ -62,7 +62,7 @@ console.log({finice})
       {/* Last Div - 25% */}
       <div className="col-span-12 lg:col-span-3">
       <Tag tag='অর্থনীতি'/>
-      <div className="grid grid-cols-1 gap-2 ">
+      <div className="">
              {finice.map((item:any) => (
                <FlexCard key={item.id} data={item} />
              ))}

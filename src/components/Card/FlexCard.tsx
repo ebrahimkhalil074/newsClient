@@ -4,10 +4,11 @@ import { Image } from "@heroui/image";
 import Link from "next/link";
 
 const FlexCard = ({data}:any) => {
+  console.log('first',data)
   return (
-    <div className="shadow-sm border p-2 bg-white  rounded-md  transition-all duration-300  hover:scale-105 hover:shadow-xl">
-{ data?.news?.map((data:any) =>(
- <div key={data.id}>
+    <div className="grid grid-cols-1">
+{/* { data?.news?.map((data:any) =>( */}
+ <div className="">
   <Link href={data.id}>
    <div className="flex gap-2 mt-2">
      <div className="flex-1">
@@ -19,7 +20,7 @@ const FlexCard = ({data}:any) => {
     </div>
   </Link>
  </div>
-))}
+ {/* ))} */}
       
         </div>
   

@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import { FieldValues } from "react-hook-form";
 
 import axiosInstance from "@/src/lib/axiosInstance";
+import { ApiError } from "next/dist/server/api-utils";
 
 export const userRegister = async (userData: FieldValues) => {
   try {
@@ -41,6 +42,7 @@ export const Logout = async () => {
   try {
     (await cookies()).delete("accessToken");
     (await cookies()).delete("refreshToken");
+   
   } catch (error: any) {
     throw new Error(error);
   }

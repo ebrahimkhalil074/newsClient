@@ -10,14 +10,18 @@ import { useRouter } from "next/navigation";
 import { useUser } from "../context/user.context";
 import { Avatar } from "@heroui/avatar";
 import { FaList } from "react-icons/fa6";
+import { Logout } from "../services/authServices";
 
 const NavbarDropdown = () => {
   const router = useRouter();
-  const {user} =useUser()
+  const {user,setUser} =useUser()
 
   // লগআউট ফাংশন
   const handleLogout = async () => {
     console.log("লগআউট হচ্ছে...");
+    Logout()
+    setUser(null)
+    router.push('/')
     // await signOut({ callbackUrl: "/" }); // লগআউটের পর হোম পেজে নিয়ে যাবে
   };
 

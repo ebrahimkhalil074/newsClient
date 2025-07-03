@@ -66,19 +66,40 @@ export const usePostLikes = () => {
     mutationFn: async (data: LikeData) => await postLikes(data),
 
     // ✅ Called when the like/unlike is successful
-    onSuccess: (response,variables) => {
+    // onSuccess: (response,variables) => {
 
-        console.log('hook',response)
-      if (response?.data.status === 'liked') {
-        toast.success('✅ Liked successfully!');
-      } else if (response?.data.status === 'unliked') {
-        toast.info('❎ Unliked successfully!');
-      } else {
-        toast.success('Action completed.');
-      }
-      queryClient.invalidateQueries({ queryKey: ["single-news","single-videos", variables.newsId,variables.videoId] });
-    },
+    //     console.log('hook',response)
+    //   if (response?.data.status === 'liked') {
+    //     toast.success('✅ Liked successfully!');
+    //   } else if (response?.data.status === 'unliked') {
+    //     toast.info('❎ Unliked successfully!');
+    //   } else {
+    //     toast.success('Action completed.');
+    //   }
+    //   queryClient.invalidateQueries({ queryKey: ["single-news","single-videos", variables.newsId,variables.videoId] });
+    // },
+onSuccess: (response, variables) => {
+  console.log('hook', response);
 
+  if (response?.data.status === 'liked') {
+    toast.success('✅ Liked successfully!');
+  } else if (response?.data.status === 'unliked') {
+    toast.info('❎ Unliked successfully!');
+  } else {
+    toast.success('Action completed.');
+  }
+
+  // newsId থাকলে শুধুমাত্র single-news invalidate করো
+  if (variables.newsId) {
+    queryClient.invalidateQueries({ queryKey: ['single-news', variables.newsId] });
+  }
+
+  // videoId থাকলে শুধুমাত্র single-videos invalidate করো
+  if (variables.videoId) {
+    queryClient.invalidateQueries({ queryKey: ['single-videos', variables.videoId] });
+  }
+}
+,
     //  Called when there's an error
     onError: (error: any) => {
         console.log('hook',error)

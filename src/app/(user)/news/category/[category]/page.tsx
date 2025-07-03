@@ -14,11 +14,15 @@ import { useGetAllCategory } from "@/src/hooks/categoy.hook";
 import { useGetAllNews } from "@/src/hooks/news.hook";
 import Filtering from "@/src/components/Filtering";
 import noDataImg from "./../../../../../assets/3024051.jpg"
+import NFlexCard from "@/src/components/Card/NflexCard";
+
 const Page = () => {
-  const {category} =useParams()
-  const { data:daynamic, isLoading } = useGetAllCategory(category);
+  const {category} =useParams();
+  const daynamicCategory =decodeURIComponent(category as string)
+  const { data:daynamic, isLoading } = useGetAllCategory(daynamicCategory);
 console.log(daynamic)
   const daynamicData = daynamic?.data ?? [];
+
   const { data:allNews,  } = useGetAllNews();
 console.log(allNews)
   const allNewsData = allNews?.data ?? [];
@@ -30,6 +34,7 @@ const [active, setActive] = useState('সর্বশেষ');
     ? [...allNewsData].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) // সর্বশেষ
     : [...allNewsData].sort((a, b) => b.likes.length - a.likes.length); // জনপ্রিয়
     console.log({filteredData})
+  
   return (
     <div className="grid grid-cols-12 gap-4">
       <div className="col-span-12">
@@ -40,11 +45,12 @@ const [active, setActive] = useState('সর্বশেষ');
    </div>
   
     {/* Image Section */}
-    {daynamicData.length > 0?<div className="col-span-12 lg:col-span-8">
+    {daynamicData.length > 0?
+    <div className="col-span-12 lg:col-span-8">
       <div className="relative w-full  rounded overflow-hidden">
         <Image
-          src={daynamicData[1]?.image}
-          alt={daynamicData[1]?.title}
+          src={daynamicData[0]?.news[0]?.image}
+          alt={daynamicData[0]?.news[0]?.title}
           className="object-cover"
         />
         <div className="absolute bottom-0 left-0 w-full bg-black bg-opacity-50 text-white p-4 z-10">
@@ -53,7 +59,11 @@ const [active, setActive] = useState('সর্বশেষ');
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
         {
-          daynamicData.map((item:any) => <FlexCard key={item.id} data={item}/>)
+          daynamicData.map((item:any) => (
+            item.news.map((ite:any)=>(
+              <FlexCard key={ite.id} data={ite}/>
+            )) 
+          ))
         }
       </div>
       {/* add */}
@@ -66,7 +76,9 @@ const [active, setActive] = useState('সর্বশেষ');
         daynamicData.map((item:any) => <MiddleCard key={item.id} data={item}/>)
         }
       </div>
-    </div>:<div className="col-span-12 lg:col-span-8">
+    </div>
+    :
+    <div className="col-span-12 lg:col-span-8">
       <h1>NO DATA THIS CATEGORY {`${decodeURIComponent(category as string)}`}</h1>
       <Image height={500} width={1000} src={noDataImg.src}/>
 
@@ -77,10 +89,15 @@ const [active, setActive] = useState('সর্বশেষ');
     <div className="col-span-12">
    <Tag tag='সর্বাধিক পঠিত'/>
    </div>
-    <div className="grid grid-cols-1 gap-4 mt-4 ">
-             {daynamicData.map((item:any) => (
-               <FlexCard key={item.id} data={item} />
-             ))}
+    <div className="grid grid-cols-1  gap-4 mt-4 ">
+             {
+          daynamicData.map((item:any) => (
+            item.news.map((ite:any)=>(
+              <FlexCard key={ite.id} data={ite}/>
+            )) 
+          ))
+        }
+          
            </div>
 <div className="my-4 mr-8">
   <Slider2 />

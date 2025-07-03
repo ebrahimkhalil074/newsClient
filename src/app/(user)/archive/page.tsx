@@ -432,7 +432,7 @@ console.log(searchData)
             </h2>
             <div className="list-disc list-inside space-y-4 text-gray-800 ">
               {searchData.map((item:any) => (
-                <FlexCard key={item.id} item={item} />
+                <FlexCard key={item.id} data={item} />
               ))}
             </div>
           </div>

@@ -13,9 +13,7 @@ export default function Home() {
    const {data:newsData,isError,isLoading:newsLoading} =useGetAllNews();
    console.log(newsData)
    const {data:videoData,isError:videoError,isLoading:videoLoading} =useGetAllVideos();
-   if (newsLoading || videoLoading) {
-    return <h1 className="h-screen">loding...</h1>
-   }
+   
   const news = newsData?.data 
   const video = videoData?.data 
   

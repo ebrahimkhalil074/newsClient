@@ -19,12 +19,14 @@ import { usePostLikes } from "../hooks/news.hook";
 import { getAnonymousUserId } from "../utills/anonymousUser";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { Textarea } from "@heroui/input";
-import { useCreatedComment } from "../hooks/comment.hook";
+import { useCreatedComment, useUdatedComment } from "../hooks/comment.hook";
 
 const NewsDetails = ({ data, allNews }: { data: any; allNews: any[] }) => {
   const [active, setActive] = useState("সর্বশেষ");
   const [currentUrl, setCurrentUrl] = useState("");
- 
+ const [editingId, setEditingId] = useState<string | null>(null);
+const [editedContent, setEditedContent] = useState<string>('');
+
   const anonymousId = getAnonymousUserId();
 
   const {
@@ -36,6 +38,7 @@ const NewsDetails = ({ data, allNews }: { data: any; allNews: any[] }) => {
 
   const { mutate: createLike } = usePostLikes();
   const { mutate: createComment } = useCreatedComment();
+  const { mutate: updatedComment } = useUdatedComment();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -66,6 +69,21 @@ createComment(commentData)
 reset()
 
   };
+  const handleSave = async (commentId: string) => {
+
+  const data ={
+    commentId,
+    updatedData:{
+     content:editedContent,
+    }
+    
+  }
+  console.log(data)
+  updatedComment(data)
+  setEditingId(null);
+
+};
+
 
   const filteredData =
     active === "সর্বশেষ"
@@ -149,16 +167,63 @@ reset()
           </form>
 
           {/* 🧾 Comment List */}
-          <div className="mt-4 space-y-3">
+          {/* <div className="mt-4 space-y-3">
             {data?.comments?.map((comment: any, i: number) => (
               <div key={i} className="border p-3 rounded-md bg-gray-50">
                 <p className="text-gray-700">{comment.content}</p>
+              
                 <p className="text-xs text-gray-400">
                   {new Date(comment.createdAt).toLocaleString()}
                 </p>
               </div>
             ))}
+          </div> */}
+         <div className="mt-4 space-y-3">
+  {data?.comments?.map((comment: any) => (
+    <div key={comment.id} className="border p-3 rounded-md bg-gray-50">
+      {editingId === comment.id ? (
+        <>
+          <textarea
+            value={editedContent}
+            onChange={(e) => setEditedContent(e.target.value)}
+            className="w-full p-2 border rounded"
+          />
+          <div className="flex gap-2 mt-2">
+            <button
+              onClick={() => handleSave(comment.id)}
+              className="bg-green-500 text-white px-3 py-1 rounded"
+            >
+              Save
+            </button>
+            <button
+              onClick={() => setEditingId(null)}
+              className="bg-gray-400 text-white px-3 py-1 rounded"
+            >
+              Cancel
+            </button>
           </div>
+        </>
+      ) : (
+        <>
+          <p className="text-gray-700">{comment.content}</p>
+          <p className="text-xs text-gray-400">
+            {new Date(comment.createdAt).toLocaleString()}
+          </p>
+          <button
+            onClick={() => {
+              setEditingId(comment.id); // ✅ শুধু এই comment এর id
+              setEditedContent(comment.content); // ✅ ঐ comment এর content
+            }}
+            className="text-blue-500 text-sm mt-1"
+          >
+            Edit
+          </button>
+        </>
+      )}
+    </div>
+  ))}
+</div>
+
         </div>
       </div>
 
